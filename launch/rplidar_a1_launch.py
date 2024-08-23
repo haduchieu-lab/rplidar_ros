@@ -11,6 +11,7 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
+    bringup_dir = get_package_share_directory('nav2_bringup')
     channel_type =  LaunchConfiguration('channel_type', default='serial')
     serial_port = LaunchConfiguration('serial_port', default='/dev/ttyUSB0')
     serial_baudrate = LaunchConfiguration('serial_baudrate', default='115200')
@@ -18,13 +19,20 @@ def generate_launch_description():
     inverted = LaunchConfiguration('inverted', default='false')
     angle_compensate = LaunchConfiguration('angle_compensate', default='true')
     scan_mode = LaunchConfiguration('scan_mode', default='Sensitivity')
-    
+    slam = LaunchConfiguration('slam',default='true')
+    map = LaunchConfiguration('map')
+
     return LaunchDescription([
 
         DeclareLaunchArgument(
             'channel_type',
             default_value=channel_type,
             description='Specifying channel type of lidar'),
+        
+        DeclareLaunchArgument(
+            name='slam',
+            default_value='False',
+            description='Whether to run SLAM'),
         
         DeclareLaunchArgument(
             'serial_port',
@@ -47,6 +55,12 @@ def generate_launch_description():
             description='Specifying whether or not to invert scan data'),
 
         DeclareLaunchArgument(
+        'map',
+        default_value=os.path.join(
+            bringup_dir, 'maps', 'turtlebot3_world.yaml'),
+        description='Full path to map file to load'),
+
+        DeclareLaunchArgument(
             'angle_compensate',
             default_value=angle_compensate,
             description='Specifying whether or not to enable angle_compensate of scan data'),
@@ -54,7 +68,8 @@ def generate_launch_description():
             'scan_mode',
             default_value=scan_mode,
             description='Specifying scan mode of lidar'),
-
+        
+       
 
         Node(
             package='rplidar_ros',

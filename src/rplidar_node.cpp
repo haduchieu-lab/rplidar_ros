@@ -104,7 +104,7 @@ class RPlidarNode : public rclcpp::Node
         if(channel_type == "udp")
             this->get_parameter_or<float>("scan_frequency", scan_frequency, 20.0);
         else
-            this->get_parameter_or<float>("scan_frequency", scan_frequency, 10.0);
+            this->get_parameter_or<float>("scan_frequency", scan_frequency, 20.0);
     }
 
     bool getRPLIDARDeviceInfo(ILidarDriver * drv)
@@ -343,7 +343,7 @@ class RPlidarNode : public rclcpp::Node
         }
 
         RCLCPP_INFO(this->get_logger(), "Start");
-        drv->setMotorSpeed();
+        drv->setMotorSpeed(600);
         if (!set_scan_mode()) {
             this->stop();
             RCLCPP_ERROR(this->get_logger(), "Failed to set scan mode");
@@ -471,7 +471,7 @@ public:
 
             if (op_result == SL_RESULT_OK) {
                 if(scan_frequency_tunning_after_scan) { //Set scan frequency(For Slamtec Tof lidar)
-                    RCLCPP_ERROR(this->get_logger(), "set lidar scan frequency to %.1f Hz(%.1f Rpm) ",scan_frequency,scan_frequency*60);
+                    RCLCPP_ERROR(this->get_logger(), "set lidar scan frequency to %.1f Hz(%.1f Rpm) ",scan_frequency,scan_frequency*100);
                     drv->setMotorSpeed(scan_frequency*60); //rpm 
                     scan_frequency_tunning_after_scan = false;
                     continue;

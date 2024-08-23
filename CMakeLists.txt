@@ -44,6 +44,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
+find_package(rclpy REQUIRED)
 
 ################################################################################
 # Build
@@ -91,6 +92,7 @@ install(
 # Macro for ament package
 ################################################################################
 ament_export_dependencies(rclcpp)
+ament_export_dependencies(rclpy)
 ament_export_dependencies(std_msgs)
 ament_export_dependencies(sensor_msgs)
 ament_export_include_directories(include)
